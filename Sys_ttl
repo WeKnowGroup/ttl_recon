@@ -1,0 +1,82 @@
+#!/usr/bin/python3
+
+import subprocess, sys, re
+from colorama import Fore as F
+
+#
+adv = F.YELLOW+"["+F.RED+"!"+F.YELLOW+"]"+F.RESET
+pls = F.YELLOW+"["+F.GREEN+"+"+F.YELLOW+"]"+F.RESET
+
+# Fuctions
+#['~', "!", "@", '#', "$", '%', '^', '&', '*', '(', ')', '_', '_', '+', '=', '{', '}', ']', '[', '|', '\\', '`', ',', '/', "?", ';', ':', '<', '>', '"', "'"]
+def ip(host):
+    #Sive para evitar ejecucion de comnado
+    forbidden = ['~', "!", "@", '#', "$", '%', '^', '&', '*', '(', ')', '_', '_', '+', '=', '{', '}', ']', '[', '|', '\\', '`', ',', '/', "?", ';', ':', '<', '>', '"', "'"]
+
+    for x in forbidden:
+        for i in host:
+            if x == i:
+                print(adv+' Forbidden special characters. "{}"'.format(x))
+                sys.exit(1)
+    try:
+        ping = subprocess.Popen(["ping -c 1 {}".format(host)], stdout=subprocess.PIPE, shell=True)
+        (ttl, _) = ping.communicate()
+        ttl = ttl.decode("utf-8").split()
+        ttl = re.findall(r"[-+]?\d*\.\d+|[-+]?\d+", ttl[12])
+        ttl = int(ttl[0])
+    except Exception:
+        pass
+    
+    if ttl >= 0 and ttl <=64:
+        return (pls+" {} => Linux/FreeBSD/MacOS. ttl={}".format(host,ttl))
+    elif ttl >= 65 and ttl <= 128:
+        return (pls+' {} => Windows/XP/7/8/10. ttl={}'.format(host, ttl))
+    elif ttl >= 129 and ttl <= 254:
+        return (pls+" {} => Unknown. ttl={}".format(host, ttl))
+    else:
+        pass
+
+def domine(host):
+    forbidden = ['~', "!", "@", '#', "$", '%', '^', '&', '*', '(', ')', '_', '_', '+', '=', '{', '}', ']', '[', '|', '\\', '`', ',', '/', "?", ';', ':', '<', '>', '"', "'"]
+
+    for x in forbidden:
+        for i in host:
+            if x == i:
+                print(adv+' Forbidden special characters. "{}"'.format(x))
+                exit(1)
+    try:
+        ping = subprocess.Popen(["ping -c 1 {}".format(host)],stdout=subprocess.PIPE, shell=True)
+        (ttl, _) = ping.communicate()
+        ttl = ttl.decode("utf-8").split()
+        ttl = re.findall(r"[-+]?\d*\.\d+|[-+]?\d+", ttl[13])
+        ttl = int(ttl[0])
+    except Exception:
+        pass
+    if not ttl:
+        return (adv+' {} Nombre o servicio desconocido.'.format(host))
+    else:
+        pass
+    if ttl >= 0 and ttl <=64:
+        return (pls+" {} => Linux/FreeBSD/MacOS. ttl={}".format(host,ttl))
+    elif ttl >= 65 and ttl <= 128:
+        return (pls+' {} => Windows/XP/7/8/10. ttl={}'.format(host, ttl))
+    elif ttl >= 129 and ttl <= 254:
+        return (pls+" {} => Unknown. ttl={}".format(host, ttl))
+    else:
+        pass
+
+if __name__ == '__main__':
+    try:
+        if len(sys.argv) != 3:
+            print("\n"+adv+" Example. Usa python3 {} -d/-i ww.example.com/127.0.0.1".format(__file__))
+        else:
+            if sys.argv[1] == '-d':
+                print(domine(sys.argv[2]))
+            elif sys.argv[1] == '-i':
+                print(ip(sys.argv[2]))
+            else:
+                print("\n"+adv+" Example. Usa python3 {} -i 127.0.0.1".format(__file__))
+                print(adv+" Example. Usa python3 {} -d www.exaple.com".format(__file__))
+    except KeyboardInterrupt:
+        print('\n'+adv+' Exiting...')
+        exit(1)
