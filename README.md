@@ -1,6 +1,7 @@
 <html>
+<h1>sys_ttl</h1>
 <p align=center>Esta herramienta es hecha para relizar una detecion de sistema en base al ttl.
-Que es el ttl?
+<h3>Que es el ttl?</h3>
 (Fuente de google)
 El TTL forma parte de la cabecera IP con un tamaño de 8 bits. El valor se inicializa en el emisor y tiene la función de ir descontando de un contador una unidad según el datagrama IP viaje de un nodo a otro, por lo que debe de ser recalculado en cada salto. Si dicho contador llega a cero, descarta el paquete recibido y lo reenvía al destino del que proviene en vez de difundirlo. Este campo de la cabecera IP impide la congestión o sobrecarga en las colas de las líneas de trasmisión, ya que si un paquete está en la cola, el TTL se decrementa también si pasa un largo periodo.
 
